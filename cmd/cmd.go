@@ -13,6 +13,7 @@ type OccurrenceMap map[*ast.FuncDecl][]string
 
 type Visitor struct {
 	Occurrence OccurrenceMap
+	FileSet    *token.FileSet
 }
 
 var Blacklist = []string{"MustQuery", "MustExec", "mustExecute"}
@@ -82,9 +83,11 @@ func (v *Visitor) checkEvil(callee *ast.Ident, name *ast.Ident, node *ast.FuncDe
 func Calculate(paths []string) (Visitors, error) {
 	visitors := make(Visitors)
 	for _, path := range paths {
+		fs := token.NewFileSet()
 		visitor := &Visitor{Occurrence: make(OccurrenceMap)}
+		visitor.FileSet = fs
 		p, _ := filepath.Abs(path)
-		f, err := parser.ParseFile(token.NewFileSet(), p, nil, parser.AllErrors)
+		f, err := parser.ParseFile(fs, p, nil, parser.AllErrors)
 		// ast.Print(fset, f)
 		if err != nil {
 			return nil, err

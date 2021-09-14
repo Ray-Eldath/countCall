@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var paths = []string{"/Users/ray/Library/Application Support/JetBrains/GoLand2021.2/scratches/test.go"}
+var paths = []string{"./test.go.txt"}
 
 func TestFile(t *testing.T) {
 	visitors, err := Calculate(paths)
@@ -14,7 +14,9 @@ func TestFile(t *testing.T) {
 	}
 	for _, visitor := range visitors {
 		for funk, idents := range visitor.Occurrence {
-			fmt.Printf("%s %v  total: %d\n", funk.Name, idents, len(idents))
+			start := visitor.FileSet.Position(funk.Pos())
+			end := visitor.FileSet.Position(funk.End())
+			fmt.Printf("%s %v  total: %d from %d:%d to %d:%d\n", funk.Name, idents, len(idents), start.Line, start.Column, end.Line, end.Column)
 		}
 	}
 }

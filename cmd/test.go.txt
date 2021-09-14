@@ -41,6 +41,32 @@ func (s *testIsolationSuite) TestP1DirtyRead(c *C) {
 	s1.s2.s3.s4.MustQuery("123").Check("456")
 }
 
+func (s *testIsolationSuite) TestP2DirtyRead(c *C) {
+	if test {
+		tif.MustExec("drop table if exists x;")
+	}
+	if test1 {
+		if test2 {
+			tifif.MustExec("drop table if exists x;")
+		}
+	}
+	for x := 0; x < 10; x++ {
+		tfor.MustExec("drop table if exists x;")
+	}
+	for x := 0; x < 10; x++ {
+		for i := 0; i < 10; i++ {
+			tforfor.MustExec("drop table if exists x;")
+		}
+	}
+	for x := range xs {
+		trange.MustExec("insert into x values(1, 1);")
+	}
+	go tgo.MustExec("insert into x values(1, 1);")
+
+	s.MustExec("select c from x where id = 1;")
+	sc.MustQuery("select c from x where id = 1;").Check(testkit.Rows("1"))
+}
+
 func TestPass() {
 
 }
