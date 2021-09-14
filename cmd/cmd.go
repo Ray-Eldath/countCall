@@ -106,7 +106,10 @@ func Print(paths []string) error {
 		if err != nil {
 			return err
 		}
-		ast.Print(fset, f)
+		err = ast.Print(fset, f)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
