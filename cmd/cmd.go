@@ -16,7 +16,7 @@ type Visitor struct {
 	FileSet    *token.FileSet
 }
 
-var Blacklist = []string{"MustQuery", "MustExec", "mustExecute"}
+var Cal []string
 
 func (v *Visitor) Visit(node ast.Node) (w ast.Visitor) {
 	switch n := node.(type) {
@@ -73,7 +73,7 @@ func (v *Visitor) checkSelectorExpr(expr *ast.SelectorExpr, node *ast.FuncDecl) 
 
 func (v *Visitor) checkEvil(callee *ast.Ident, name *ast.Ident, node *ast.FuncDecl) {
 	n := name.Name
-	for _, f := range Blacklist {
+	for _, f := range Cal {
 		if f == n {
 			v.Occurrence[node] = append(v.Occurrence[node], callee.String())
 		}

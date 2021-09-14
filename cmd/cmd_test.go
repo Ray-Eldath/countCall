@@ -8,6 +8,7 @@ import (
 var paths = []string{"./test.go.txt"}
 
 func TestFile(t *testing.T) {
+	Cal = []string{"MustQuery", "MustExec", "mustExecute"}
 	visitors, err := Calculate(paths)
 	if err != nil {
 		t.Fatal(err)
