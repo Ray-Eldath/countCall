@@ -10,10 +10,11 @@ import (
 var paths = []string{"./test.go.txt"}
 
 var Expected = map[string][]string{
-	"TestFail1": {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "targ", "tclosure3", "tclosure2", "tclosure3", "s", "sc", "<nil>"},
-	"TestFail2": {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "s", "sc"},
-	"TestPass1": {},
-	"TestPass2": {},
+	"TestFail1":       {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "targ", "tclosure3", "tclosure2", "tclosure3", "<nil>", "tassign", "<nil>", "s", "sc", "<nil>"},
+	"TestFail2":       {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "s", "sc"},
+	"TestPass1":       {},
+	"TestPass2":       {},
+	"TestGCPartition": {"testKit"},
 }
 
 func TestFile(t *testing.T) {
@@ -26,6 +27,7 @@ func TestFile(t *testing.T) {
 			assert.Contains(t, Expected, funk.Name.String())
 
 			expectedFunk := Expected[funk.Name.String()]
+			assert.Len(t, idents, len(expectedFunk))
 			for i := 0; i < len(idents); i++ {
 				assert.Equal(t, expectedFunk[i], idents[i])
 			}

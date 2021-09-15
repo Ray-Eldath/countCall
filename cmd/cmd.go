@@ -45,7 +45,20 @@ func (v *Visitor) checkBlockStmt(block *ast.BlockStmt, n *ast.FuncDecl) {
 			v.checkBlockStmt(e.Body, n)
 		case *ast.GoStmt:
 			v.checkCallExpr(e.Call, n)
+		case *ast.AssignStmt:
+			for _, r := range e.Rhs {
+				v.checkExpr(r, n)
+			}
 		}
+	}
+}
+
+func (v *Visitor) checkExpr(expr ast.Expr, n *ast.FuncDecl) {
+	switch e := expr.(type) {
+	case *ast.CallExpr:
+		v.checkCallExpr(e, n)
+	case *ast.SelectorExpr:
+		v.checkSelectorExpr(e, n)
 	}
 }
 

@@ -40,6 +40,10 @@ func (s *testIsolationSuite) TestFail1(c *C) {
         tpass.Pass()
     })
 
+    r = MustExec("drop table t")
+    r = tassign.MustExec("drop table t")
+    r = tassign1.tassign2.MustExec("drop table t")
+
 	s.MustExec("select c from x where id = 1;")
 	tpass.Pass()
 	sc.MustQuery("select c from x where id = 1;").Check(testkit.Rows("1"))
@@ -108,4 +112,12 @@ func TestPass2() {
 	go tpass.Pass()
 
     tpass.Pass()
+}
+
+func (s *testStatsSuite) TestGCPartition(c *C) {
+	defer cleanEnv(c, s.store, s.do)
+	testKit := testkit.NewTestKit(c, s.store)
+	testkit.WithPruneMode(testKit, variable.Static, func() {
+		testKit.MustExec("use test")
+	})
 }
