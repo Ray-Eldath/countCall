@@ -10,7 +10,7 @@ import (
 var paths = []string{"./test.go.txt"}
 
 var Expected = map[string][]string{
-	"TestFail1": {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "s", "sc", "<nil>"},
+	"TestFail1": {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "targ", "tclosure3", "tclosure2", "tclosure3", "s", "sc", "<nil>"},
 	"TestFail2": {"tif", "tifif", "tfor", "tforfor", "trange", "tgo", "s", "sc"},
 	"TestPass1": {},
 	"TestPass2": {},
@@ -27,7 +27,7 @@ func TestFile(t *testing.T) {
 
 			expectedFunk := Expected[funk.Name.String()]
 			for i := 0; i < len(idents); i++ {
-				assert.Equal(t, idents[i], expectedFunk[i])
+				assert.Equal(t, expectedFunk[i], idents[i])
 			}
 
 			start := visitor.FileSet.Position(funk.Pos())

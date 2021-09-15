@@ -27,6 +27,18 @@ func (s *testIsolationSuite) TestFail1(c *C) {
 	}
 	go tgo.MustExec("insert into x values(1, 1);")
 	go tpass.Pass()
+    s.Do(t, targ.MustExec("drop table t"))
+	s.Do(t, variable.T, func() {
+        tclosure3.MustExec("drop table t")
+        tpass.Pass()
+    })
+    s.Do(t, func() {
+        tclosure2.MustExec("drop table t")
+        tpass.Pass()
+    }, func() {
+        tclosure3.MustExec("drop table t")
+        tpass.Pass()
+    })
 
 	s.MustExec("select c from x where id = 1;")
 	tpass.Pass()

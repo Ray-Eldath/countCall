@@ -51,10 +51,20 @@ func (v *Visitor) checkBlockStmt(block *ast.BlockStmt, n *ast.FuncDecl) {
 
 func (v *Visitor) checkCallExpr(call *ast.CallExpr, n *ast.FuncDecl) {
 	switch f := call.Fun.(type) {
-	case *ast.Ident: // check MustExec(...)
+	case *ast.Ident:
 		v.checkEvil(nil, f, n)
-	case *ast.SelectorExpr: // check (Ident or SelectorExpr).MustExec(...)
+	case *ast.SelectorExpr:
 		v.checkSelectorExpr(f, n)
+	}
+	for _, arg := range call.Args {
+		switch a := arg.(type) {
+		case *ast.SelectorExpr:
+			v.checkSelectorExpr(a, n)
+		case *ast.CallExpr:
+			v.checkCallExpr(a, n)
+		case *ast.FuncLit:
+			v.checkBlockStmt(a.Body, n)
+		}
 	}
 }
 
