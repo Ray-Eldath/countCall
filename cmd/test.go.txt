@@ -1,72 +1,99 @@
-// Copyright 2016 PingCAP, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
-func (s *testIsolationSuite) TestP1DirtyRead(c *C) {
+func (s *testIsolationSuite) TestFail1(c *C) {
 	if test {
 		tif.MustExec("drop table if exists x;")
+		tpass.Pass()
 	}
 	if test1 {
 		if test2 {
 			tifif.MustExec("drop table if exists x;")
+			tpass.Pass()
 		}
 	}
 	for x := 0; x < 10; x++ {
 		tfor.MustExec("drop table if exists x;")
+		tpass.Pass()
 	}
 	for x := 0; x < 10; x++ {
 		for i := 0; i < 10; i++ {
 			tforfor.MustExec("drop table if exists x;")
+			tpass.Pass()
 		}
 	}
 	for x := range xs {
 		trange.MustExec("insert into x values(1, 1);")
+		tpass.Pass()
 	}
 	go tgo.MustExec("insert into x values(1, 1);")
+	go tpass.Pass()
 
 	s.MustExec("select c from x where id = 1;")
+	tpass.Pass()
 	sc.MustQuery("select c from x where id = 1;").Check(testkit.Rows("1"))
+	tpass.Pass().Pass()
 	s1.s2.s3.s4.MustQuery("123").Check("456")
+	tpass1.tpass2.tpass3.tpass4.Pass()
 }
 
-func (s *testIsolationSuite) TestP2DirtyRead(c *C) {
+func (s *testIsolationSuite) TestFail2(c *C) {
 	if test {
 		tif.MustExec("drop table if exists x;")
+		tpass.Pass()
 	}
 	if test1 {
 		if test2 {
 			tifif.MustExec("drop table if exists x;")
+			tpass.Pass()
 		}
 	}
 	for x := 0; x < 10; x++ {
 		tfor.MustExec("drop table if exists x;")
+		tpass.Pass()
 	}
 	for x := 0; x < 10; x++ {
 		for i := 0; i < 10; i++ {
 			tforfor.MustExec("drop table if exists x;")
+			tpass.Pass()
 		}
 	}
 	for x := range xs {
 		trange.MustExec("insert into x values(1, 1);")
+		tpass.Pass()
 	}
 	go tgo.MustExec("insert into x values(1, 1);")
+	go tpass.Pass()
 
+    tpass.Pass()
 	s.MustExec("select c from x where id = 1;")
 	sc.MustQuery("select c from x where id = 1;").Check(testkit.Rows("1"))
 }
 
-func TestPass() {
+func TestPass1() {
 
+}
+
+func TestPass2() {
+	if test {
+		tpass.Pass()
+	}
+	if test1 {
+		if test2 {
+			tpass.Pass()
+		}
+	}
+	for x := 0; x < 10; x++ {
+		tpass.Pass()
+	}
+	for x := 0; x < 10; x++ {
+		for i := 0; i < 10; i++ {
+			tpass.Pass()
+		}
+	}
+	for x := range xs {
+		tpass.Pass()
+	}
+	go tpass.Pass()
+
+    tpass.Pass()
 }
